@@ -1,66 +1,71 @@
-int N = 11;
-int[] seed = new int[N];
-int[] r1 = new int[N];
-int[] r2 = new int[N];
-int count, S, R;
+int N = 11;  // Num of registers
+int[] seed = new int[N];  // Seed array
+int[] r1 = new int[N];    // Register 1 array
+int[] r2 = new int[N];    // Register 2 array
+int count, S, R;          // count counts steps, S holds seed value, R holds register value
 
 void setup() {
-  frameRate(3);
-  size(220, 120);
+  size(660, 360);
+  textSize(28);
+  frameRate(2);           // 2 iterations per second
   for (int i = 0; i < seed.length; i++) {
-    seed[i] = floor(random(2));
+    seed[i] = floor(random(2));      // Fill seed register with pseudo-random numbers
   }
-  r1 = seed;
-  S = translator(seed);
-  count = 0;
+  r1 = seed;             // transfer seed values to register 1
+  S = translator(seed);  // Sum up the values of the seed register
+  count = 0;             // counter for number of steps
 }
 
 void draw() {
-  r2 = update(r1);
-  r1 = r2;
-  R = translator(r2);
-  count++;
+  r2 = update(r1);      // update register 2 with XOR
+  r1 = r2;              // copy to register 1 which is displayed
+  R = translator(r2);   // update register value
+  count++;              // increment step
   background(200);
   display();
 }
 
+// update register 2 and use XOR between registers 8 & 10 (decider function)
 int[] update(int[] r) {
-  int[] r_temp = new int[N];
-  r_temp[0] = decider(r[8], r[10]);
-  for (int i = 1; i < r.length; i++) {
-    r_temp[i] = r[i-1];
+  int[] r_temp = new int[N];            // r_temp - temporary array for function
+  r_temp[0] = decider(r[8], r[10]);     // apply decider logic, returns an int which is
+  for (int i = 1; i < r.length; i++) {  // inserted in register position 1
+    r_temp[i] = r[i-1];                 // shift other values forward by 1 position
   }
-  return r_temp;
+  return r_temp;                        // return the whole array
 }
 
+// Draw seed and register box arrays and fill if value is 1
+// Draw text showing seed and register sum values
 void display() {
   rectMode(CORNER);
   for (int i = 0; i < seed.length; i++) {
     if (seed[i] == 0) {
       fill(225);
-      rect(i*20, 40, 20, 20);
+      rect(i*60, 120, 60, 60);
     }
     else if (seed[i] == 1) {
       fill(75);
-      rect(i*20, 40, 20, 20);
+      rect(i*60, 120, 60, 60);
     }
   }
   for (int j = 0; j < r2.length; j++) {
     if (r2[j] == 0) {
       fill(225, 0, 0);
-      rect(j*20, 60, 20, 20);    
+      rect(j*60, 180, 60, 60);    
     }
     else if (r2[j] == 1) {
       fill(125, 0, 0);
-      rect(j*20, 60, 20, 20);
+      rect(j*60, 180, 60, 60);
     }      
   }
   fill(20);
-  text("Seed = " + S, 70, 20);
+  text("Seed = " + S, 210, 60);
   fill(125, 0, 0);
-  text("Step " + count + ": " + R, 70, 110);
+  text("Step " + count + ": " + R, 210, 300);
 }
 
+// Make XOR comparison between register 1 positions 8 & 10
 int decider(int a, int b) {
   int c;
   if ( (a == 0 && b == 0) || (a == 1 && b == 1) ) {
@@ -75,6 +80,7 @@ int decider(int a, int b) {
   return c; 
 }
 
+// function for summing bits in array
 int translator(int[] arr) {
   int n = 0;
   if (arr[0] == 1) { n += 1; }
@@ -91,6 +97,7 @@ int translator(int[] arr) {
   return n;
 }
 
+// reset seed array with new random values
 int[] reseed(int[] arr) {
   for (int i = 0; i < arr.length; i++) {
     arr[i] = floor(random(2));
