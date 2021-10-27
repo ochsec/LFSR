@@ -1,2 +1,0 @@
-To Do:
-1. Create web page explaining LSFR concept with embedded Processing sketch
