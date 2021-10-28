@@ -7,8 +7,8 @@ var seed = [] /* seed array */,
     R = [] /* holds register value */;
 
 function setup() {
-  createCanvas(660, 360);
-  textSize(28);
+  createCanvas(windowWidth, windowHeight);
+  textSize(0.08 * windowHeight);
   frameRate(2);  // 2 iterations per second
   for (let i = 0; i < N; i++) {
     seed.push(Math.floor(Math.random() * 2));
@@ -29,28 +29,46 @@ function draw() {
 }
 
 function display() {
+  let brickWidth = windowWidth/11;
+  let brickHeight = (6/36)*windowHeight;
+  textSize(0.06 * windowHeight);
   rectMode(CORNER);
   for (let i = 0; i < seed.length; i++) {
     if (seed[i] == 0) {
       fill(255);
+      rect(i * brickWidth, (1/3) * windowHeight, brickWidth, brickHeight);
+      fill(75);
+      text("" + 2 ** i, i * brickWidth + brickWidth/8, 1/3*windowHeight + 1/2*brickHeight);  
     }
     else if (seed[i] == 1) {
       fill(75);
+      rect(i * brickWidth, (1/3) * windowHeight, brickWidth, brickHeight);
+      fill(255);
+      text("" + 2 ** i, i * brickWidth + brickWidth/8, 1/3*windowHeight + 1/2*brickHeight);  
     }
-    rect(i*60, 120, 60, 60);
+    
   }
   for (let i = 0; i < r2.length; i++) {
     if (r2[i] == 0) {
-      fill(255, 0, 0);  
+      fill(255, 0, 0);
+      rect(i * brickWidth, (1/3) * windowHeight + brickHeight, brickWidth, brickHeight);
+      fill(125, 0, 0);
+      text("" + 2 ** i, i * brickWidth + brickWidth/8, 1/3*windowHeight + 3/2*brickHeight); 
     } else if (r2[i] == 1) {
-      fill(125, 0, 0);  
+      fill(125, 0, 0);
+      rect(i * brickWidth, (1/3) * windowHeight + brickHeight, brickWidth, brickHeight); 
+      fill(255, 0, 0);
+      text("" + 2 ** i, i * brickWidth + brickWidth/8, 1/3*windowHeight + 3/2*brickHeight);
     }
-    rect(i*60, 180, 60, 60);
   }
   fill(20);
-  text("Seed = " + S, 210, 60);
+  text("Seed = " + S, 0.32 * windowWidth, brickHeight);
   fill(125, 0, 0);
-  text("Step " + count + ": " + R, 210, 300);
+  text("Step " + count + ": " + R, 0.32 * windowWidth, 0.83 * windowHeight);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 // Update register 2 and XOR between registers 8 & 10 (decider function).
