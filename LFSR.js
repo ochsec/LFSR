@@ -5,11 +5,31 @@ var seed = [] /* seed array */,
     count = 0 /* counts steps */, 
     S = [] /* holds seed value */, 
     R = [] /* holds register value */;
+var COLORS;
 
 function setup() {
-  createCanvas(660, 360);
-  textSize(28);
+  createCanvas(480, 260);
+  textFont('Courier New');
+  textSize(16);
   frameRate(2);  // 2 iterations per second
+
+  COLORS = {
+    BACKGROUND: color(46, 46, 46),
+    COMMENTS: color(121, 121, 121),
+    WHITE: color(214, 214, 214),
+    GREEN: color(180, 210, 115),
+    ORANGE: color(232, 125, 62),
+    PURPLE: color(158, 134, 200),
+    PINK: color(176, 82, 121),
+    BLUE: color(108, 153, 187),
+    WHITE_LITE: color('rgba(214, 214, 214, 0.5)'),
+    GREEN_LITE: color('rgba(180, 210, 115, 0.5)'),
+    ORANGE_LITE: color('rgba(232, 125, 62, 0.5)'),
+    PURPLE_LITE: color('rgba(158, 134, 200, 0.5)'),
+    PINK_LITE: color('rgba(176, 82, 121, 0.5)'),
+    BLUE_LITE: color('rgba(108, 153, 187, 0.5)'),
+  };
+
   for (let i = 0; i < N; i++) {
     seed.push(Math.floor(Math.random() * 2));
   }
@@ -24,7 +44,7 @@ function draw() {
   r1 = r2;
   R = translator(r2);
   count++;
-  background(200);
+  background(COLORS.BACKGROUND);
   display();
 }
 
@@ -32,25 +52,34 @@ function display() {
   rectMode(CORNER);
   for (let i = 0; i < seed.length; i++) {
     if (seed[i] == 0) {
-      fill(255);
+      fill(COLORS.BACKGROUND);
+      stroke(COLORS.GREEN);
+      rect(i*42, 3*42, 42, 42);
     }
     else if (seed[i] == 1) {
-      fill(75);
+      fill(COLORS.GREEN_LITE);
+      stroke(COLORS.GREEN);
+      rect(i*42, 3*42, 42, 42);
     }
-    rect(i*60, 120, 60, 60);
+    
   }
   for (let i = 0; i < r2.length; i++) {
     if (r2[i] == 0) {
-      fill(255, 0, 0);  
+      fill(COLORS.BACKGROUND);
+      stroke(COLORS.BLUE);
+      rect(i*42, 4*42, 42, 42);
     } else if (r2[i] == 1) {
-      fill(125, 0, 0);  
+      fill(COLORS.BLUE_LITE);
+      stroke(COLORS.BLUE);
+      rect(i*42, 4*42, 42, 42);
     }
-    rect(i*60, 180, 60, 60);
   }
-  fill(20);
-  text("Seed = " + S, 210, 60);
-  fill(125, 0, 0);
-  text("Step " + count + ": " + R, 210, 300);
+  fill(COLORS.GREEN);
+  stroke(COLORS.COMMENTS);
+  text("Seed = " + S, 10, 2*42 + 21);
+  fill(COLORS.BLUE);
+  stroke(COLORS.COMMENTS);
+  text("Step " + count + ": " + R, 10, 6*42 - 21);
 }
 
 // Update register 2 and XOR between registers 8 & 10 (decider function).
